@@ -21,12 +21,6 @@ const loggers = {};
 function createNewLogger(name, filepath, hours, minutes) {
     if (!loggers[name]) {
         loggers[name] = new ExecutableModule(exePath, [name, filepath]);
-        loggers[name].on('stdout', (line) => {
-            console.log(line);
-        });
-        loggers[name].on('stderr', (line) => {
-            console.log(line);
-        });
     }
     else {
         throw new Error('Logger already exists');
