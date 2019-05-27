@@ -19,7 +19,7 @@ const script = scripts[platform];
 switch (script) {
     case 'gcc':
         console.log(`Building for platform ${platform}...`);
-        child.spawn(path.join(__dirname, 'gccbuild.bat'));
+        child.spawn(path.join(__dirname, 'gccbuild.sh'));
         break;
     case 'vc':
         console.log(`Building for platform ${platform}...`);
