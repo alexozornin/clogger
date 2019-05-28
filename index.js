@@ -1,12 +1,16 @@
 'use strict'
 
 const os = require('os');
+const fs = require('fs');
 const path = require('path');
 const ExecutableModule = require('./lib/ExecutableModule.js');
 
 var exePath = path.join(__dirname, 'bin', 'CLogger');
 if (os.platform() == 'win32') {
     exePath += '.exe';
+}
+if (!fs.existsSync(exePath)) {
+    exePath = null;
 }
 
 const loggers = {};
@@ -19,6 +23,10 @@ const loggers = {};
  * @param {Number} minutes - Hours to start a new log file
  */
 function createNewLogger(name, filepath, hours, minutes) {
+    if (!exePath) {
+        console.log('CLogger executable not found. You need to build it manually.');
+        return;
+    }
     if (!loggers[name]) {
         loggers[name] = new ExecutableModule(exePath, [name, filepath]);
     }
@@ -31,6 +39,10 @@ function createNewLogger(name, filepath, hours, minutes) {
  * @param {*} name - Name of the logger
  */
 function removeLogger(name) {
+    if (!exePath) {
+        console.log('CLogger executable not found. You need to build it manually.');
+        return;
+    }
     if (loggers[name]) {
         loggers[name].exit();
         delete loggers[name];
@@ -47,6 +59,10 @@ function removeLogger(name) {
  * @param {'info' | 'debug' | 'warn' | 'error' | 'critical'} type - Type of the message
  */
 function log(name, message, type) {
+    if (!exePath) {
+        console.log('CLogger executable not found. You need to build it manually.');
+        return;
+    }
     if (loggers[name]) {
         message = JSON.stringify(message);
         if (message[message.length - 1] != '\n') {

@@ -32,6 +32,6 @@ try {
     }
 }
 catch (err) {
-    console.log('Cannot build clogger. You might be able to build manually.');
+    console.log('Cannot build CLogger. You might be able to build it manually.');
     console.log(err);
 }
