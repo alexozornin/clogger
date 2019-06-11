@@ -22,13 +22,13 @@ const loggers = {};
  * @param {Number} hours - Hours to start a new log file
  * @param {Number} minutes - Hours to start a new log file
  */
-function createNewLogger(name, filepath, hours, minutes) {
+function createNewLogger(name, filepath) {
     if (!exePath) {
         console.log('CLogger executable not found. You need to build it manually.');
         return;
     }
     if (!loggers[name]) {
-        loggers[name] = new ExecutableModule(exePath, [name, filepath]);
+        loggers[name] = new ExecutableModule(exePath, [filepath]);
     }
     else {
         throw new Error('Logger already exists');
@@ -56,7 +56,7 @@ function removeLogger(name) {
  *
  * @param {String} name - Name of the logger
  * @param {*} message
- * @param {'info' | 'debug' | 'warn' | 'error' | 'critical'} type - Type of the message
+ * @param {'debug' | 'info' | 'warn' | 'error' | 'fatal'} type - Type of the message
  */
 function log(name, message, type) {
     if (!exePath) {
@@ -70,19 +70,22 @@ function log(name, message, type) {
         }
         switch (type) {
             case 'debug':
-                loggers[name].write('D: ' + message);
+                loggers[name].write(`[Debug] ${message}`);
+                break;
+            case 'info':
+                loggers[name].write(`[Info] ${message}`);
                 break;
             case 'warn':
-                loggers[name].write('W: ' + message);
+                loggers[name].write(`[Warn] ${message}`);
                 break;
             case 'error':
-                loggers[name].write('E: ' + message);
+                loggers[name].write(`[Error] ${message}`);
                 break;
-            case 'critical':
-                loggers[name].write('C: ' + message);
+            case 'fatal':
+                loggers[name].write(`[Fatal] ${message}`);
                 break;
             default:
-                loggers[name].write('I: ' + message);
+                loggers[name].write(message);
                 break;
         }
     }
